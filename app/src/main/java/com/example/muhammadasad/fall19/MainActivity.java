@@ -1,6 +1,7 @@
 package com.example.muhammadasad.fall19;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.muhammadasad.fall19.recycler.RecyclerViewActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(!isError){
-            Intent intent = new Intent(this, Main2Activity.class);
+            Intent intent = new Intent(this, RecyclerViewActivity.class);
             intent.putExtra("NAME", name);
             startActivity(intent);
 
@@ -67,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean userNameValidation(String str){
+        SharedPreferences sp = getSharedPreferences("NAme", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putString("IsUserSave", "true");
+        ed.commit();
         boolean isValid = false;
 
         if(!str.contains("@"))
