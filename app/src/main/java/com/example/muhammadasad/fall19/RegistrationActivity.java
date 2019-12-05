@@ -10,7 +10,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.muhammadasad.fall19.db.DBOperations;
+import com.example.muhammadasad.fall19.db.User;
 import com.example.muhammadasad.fall19.recycler.RecyclerViewActivity;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -26,6 +29,13 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText gender;
     CheckBox cb;
     Button submit;
+    String fname="";
+    String lname ="" ;
+    String pass = "";
+    String emailtxt ="";
+    String phonetxt = "";
+    String gendertxt= "";
+    String address = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +49,19 @@ public class RegistrationActivity extends AppCompatActivity {
         confirmemail = findViewById(R.id.confirmEmail);
         phone = findViewById(R.id.phoneNumber);
         postalAdress = findViewById(R.id.address);
-
+        gender = findViewById(R.id.gender);
         cb = findViewById(R.id.termsandconditions);
         submit = findViewById(R.id.submitbutton);
     }
 
     public void OnSubmit (View v){
-        String fname = firstname.getText().toString();
-        String lname = lastname.getText().toString();
-        String pass = password.getText().toString();
-        String emailtxt = email.getText().toString();
-        String phonetxt = phone.getText().toString();
+         fname = firstname.getText().toString();
+         lname = lastname.getText().toString();
+         pass = password.getText().toString();
+         emailtxt = email.getText().toString();
+         phonetxt = phone.getText().toString();
+         gendertxt = gender.getText().toString();
+        address = postalAdress.getText().toString();
 
         boolean isError= false;
         if(fname != null && fname.equalsIgnoreCase("")){
@@ -72,16 +84,43 @@ public class RegistrationActivity extends AppCompatActivity {
             phone.setError("Please enter Valid name");
             isError = true;
         }
+        if(gendertxt != null && gendertxt.equalsIgnoreCase("")){
+            gender.setError("Please enter Valid name");
+            isError = true;
+        }
         if(!cb.isChecked()){
             cb.setTextColor(Color.RED);
             isError = true;
         }
 
         if(!isError){
-            Intent intent = new Intent(this, RecyclerViewActivity.class);
-            startActivity(intent);
+            if(saveUser() != 0) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else{
+                Toast.makeText(this,"Some thing went wrong",Toast.LENGTH_LONG).show();
+            }
+
 
         }
 
     }
+
+    private  User getUser(){
+        User user = new User();
+        user.setFirstName(fname);
+        user.setLastName(lname);
+        user.setAddress(address);
+        user.setEmail(emailtxt);
+        user.setGender(gendertxt);
+        user.setPhoneNumber(phonetxt);
+        user.setPassword(pass);
+        return user;
+    }
+
+    private long saveUser(){
+        DBOperations db = new DBOperations();
+        return  db.writeUserinDB(getUser());
+    }
+
 }
