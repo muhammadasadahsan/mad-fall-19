@@ -71,7 +71,14 @@ public class MainActivity extends AppCompatActivity {
 //            startActivity(intent);
 
         }
+//        NetworkManager.getNetworkManger().getLocalUserInformation("asad@testuse");
 
+        executeTask();
+
+    }
+
+    private void executeTask(){
+        new BackgroundTask().execute("test string");
     }
 
     private User getUser(String email){
