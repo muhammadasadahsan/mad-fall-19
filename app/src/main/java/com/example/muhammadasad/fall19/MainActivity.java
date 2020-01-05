@@ -3,17 +3,22 @@ package com.example.muhammadasad.fall19;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.muhammadasad.fall19.db.DBOperations;
 import com.example.muhammadasad.fall19.db.User;
-import com.example.muhammadasad.fall19.recycler.RecyclerViewActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     EditText email;
     EditText phone;
     CheckBox cb;
+    private ProgressBar spinner;
+
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +42,12 @@ public class MainActivity extends AppCompatActivity {
         email = findViewById(R.id.editText3);
         phone = findViewById(R.id.editText4);
         cb = findViewById(R.id.checkBox);
+        spinner = findViewById(R.id.progressBar1);
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public void onClickSubmitButton(View v){
+        spinner.setVisibility(View.VISIBLE);
         String name = username.getText().toString();
         String pass = password.getText().toString();
         String emailtxt = email.getText().toString();
@@ -64,16 +75,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(!isError){
-            String test = getUser(emailtxt).getEmail();
-            Toast.makeText(this,"String found---" + test,Toast.LENGTH_LONG).show();
-//            Intent intent = new Intent(this, RecyclerViewActivity.class);
+            firebaseAuth.signInWithEmailAndPassword(emailtxt, pass).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
+                    if (!task.isSuccessful()) {
+                        spinner.setVisibility(View.GONE);
+                        Toast.makeText(MainActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
+                    } else {
+                        spinner.setVisibility(View.GONE);
+                        startActivity(new Intent(MainActivity.this, Main2Activity.class));
+                    }
+
+                }
+            });
+       //            Intent intent = new Intent(this, RecyclerViewActivity.class);
 //            intent.putExtra("NAME", name);
 //            startActivity(intent);
 
         }
 //        NetworkManager.getNetworkManger().getLocalUserInformation("asad@testuse");
 
-        executeTask();
+//        executeTask();
 
     }
 

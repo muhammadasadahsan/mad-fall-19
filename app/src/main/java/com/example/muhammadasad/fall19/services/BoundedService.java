@@ -4,10 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import androidx.annotation.Nullable;
 
-import static android.support.constraint.Constraints.TAG;
 
 public class BoundedService extends Service {
 

@@ -2,19 +2,23 @@ package com.example.muhammadasad.fall19;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.muhammadasad.fall19.db.DBOperations;
 import com.example.muhammadasad.fall19.db.User;
-import com.example.muhammadasad.fall19.recycler.RecyclerViewActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -36,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
     String phonetxt = "";
     String gendertxt= "";
     String address = "";
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class RegistrationActivity extends AppCompatActivity {
         gender = findViewById(R.id.gender);
         cb = findViewById(R.id.termsandconditions);
         submit = findViewById(R.id.submitbutton);
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public void OnSubmit (View v){
@@ -94,13 +100,29 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
         if(!isError){
-            if(saveUser() != 0) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-            } else{
-                Toast.makeText(this,"Some thing went wrong",Toast.LENGTH_LONG).show();
-            }
+//            if(saveUser() != 0) {
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
+//            } else{
+//                Toast.makeText(this,"Some thing went wrong",Toast.LENGTH_LONG).show();
+//            }
+            firebaseAuth.createUserWithEmailAndPassword(emailtxt, pass).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener() {
+                @Override
+                public void onComplete(@NonNull Task task) {
 
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(RegistrationActivity.this.getApplicationContext(),
+                                "SignUp unsuccessful: " + task.getException().getMessage(),
+                                Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        FirebaseUser fbuser = firebaseAuth.getCurrentUser();
+                        Log.d("User:::" , fbuser.getEmail());
+                        startActivity(new Intent(RegistrationActivity.this, Main2Activity.class));
+                    }
+                }
+
+            });
 
         }
 
