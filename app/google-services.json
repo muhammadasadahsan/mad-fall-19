@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "117803691489",
+    "firebase_url": "https://fallmad2016.firebaseio.com",
+    "project_id": "fallmad2016",
+    "storage_bucket": "fallmad2016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117803691489:android:6b9cfd9ec58abe90e676a0",
+        "android_client_info": {
+          "package_name": "com.example.muhammadasad.fall19"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117803691489-um7qh4s5e8u01c8ps75on4eo3393fjl3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg_cY6xhSosIgygyXrbEXeDD8Cdgd9gx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117803691489-um7qh4s5e8u01c8ps75on4eo3393fjl3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
